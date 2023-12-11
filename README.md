@@ -1,7 +1,7 @@
 # react-native-e2ee (WIP)
 
 This is the very beginning of the react-native-e2ee project.
-It's main goal is to provide a developer friendly JS interface for generating and safely storing cryptographic keys for end-to-end encryption.
+Its main goal is to provide a developer friendly JS interface for generating and safely storing cryptographic keys for end-to-end encryption.
 
 ## Contributing
 
