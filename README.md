@@ -1,22 +1,7 @@
-# react-native-e2ee
+# react-native-e2ee (WIP)
 
-End-to-End Encryption (E2EE) made easy for react-native projects
-
-## Installation
-
-```sh
-npm install react-native-e2ee
-```
-
-## Usage
-
-```js
-import { multiply } from 'react-native-e2ee';
-
-// ...
-
-const result = await multiply(3, 7);
-```
+This is the very beginning of the react-native-e2ee project.
+It's main goal is to provide a developer friendly JS interface for generating and safely storing cryptographic keys for end-to-end encryption.
 
 ## Contributing
 
