@@ -1,3 +1,5 @@
+import org.gradle.internal.os.OperatingSystem;
+
 buildscript {
   repositories {
     google()
@@ -8,6 +10,14 @@ buildscript {
     classpath "com.android.tools.build:gradle:7.2.1"
   }
 }
+
+plugins {
+  id 'de.undercouch.download' version '4.1.1'
+}
+
+apply plugin: 'de.undercouch.download'
+
+def _minSdkVersion = ((rootProject?.ext?.properties?.minSdkVersion) ?: 24)
 
 def isNewArchitectureEnabled() {
   return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
@@ -59,6 +69,10 @@ android {
         cppFlags "-O2 -frtti -fexceptions -Wall -fstack-protector-all"
       }
     }
+
+    ndk {
+      abiFilters = project(":app").android.defaultConfig.ndk.abiFilters ?: ["armeabi-v7a", "x86_64", "arm64-v8a"]
+    }
   }
 
   externalNativeBuild {
@@ -94,5 +108,95 @@ dependencies {
   // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
+}
+
+task downloadAndBuildOpenSSL {
+
+  String arch;
+  String compiler_prefix;
+  String ndk_bundle_path;
+  String toolchain_path;
+
+  def nativeLibrariesABIs = android.defaultConfig.ndk.abiFilters;
+  if (nativeLibrariesABIs == null) {
+    // No abiFilter is defined for the build. Build native libraries for every architecture.
+    nativeLibrariesABIs = ["armeabi-v7a", "arm64-v8a", "x86_64"] as Set<String>;
+  }
+
+  nativeLibrariesABIs.each { abi_name ->
+    arch = {
+      switch (abi_name) {
+        case 'armeabi-v7a':
+          'arm'
+          break
+        case 'arm64-v8a':
+          'arm64'
+          break
+        default:
+          abi_name
+          break
+      }
+    }()
+
+    switch (arch) {
+      case 'arm':
+        compiler_prefix = "armv7a-linux-androideabi"
+        break
+      case 'x86_64':
+        compiler_prefix = "x86_64-linux-android"
+        break
+      case 'arm64':
+        compiler_prefix = "aarch64-linux-android"
+        break
+      default:
+        throw new GradleException("Unsupported architecture for native libraries: ${arch}")
+        break
+    }
+
+    String temp_host_tag
+    if (OperatingSystem.current().isMacOsX()) {
+      temp_host_tag = 'darwin-x86_64'
+    } else if (OperatingSystem.current().isLinux()) {
+      temp_host_tag = 'linux-x86_64'
+    } else {
+      throw new GradleException("Unsupported operating system for native libraries: ${OperatingSystem.current().getName()}")
+    }
+
+    ndk_bundle_path = android.ndkDirectory
+    toolchain_path = "${ndk_bundle_path}/toolchains/llvm/prebuilt/${temp_host_tag}"
+  }
+
+  doLast {
+    // Download OpenSSL
+    def openssl_source_file = new File(buildDir, 'openssl-3.2.0.tar.gz')
+    def openssl_dest = "${buildDir}/openssl-3.2.0/"
+    if (!openssl_source_file.exists()) {
+      download {
+        src 'https://www.openssl.org/source/openssl-3.2.0.tar.gz'
+        dest new File(buildDir, 'openssl-3.2.0.tar.gz')
+      }
+    }
+
+    // Extract the tarball
+    exec {
+      commandLine 'tar', '-xvf', openssl_source_file, '-C', buildDir
+    }
+
+    // Configure OpenSSL
+    exec {
+      workingDir openssl_dest
+      environment "ANDROID_NDK_ROOT", ndk_bundle_path
+      environment "PATH", "$toolchain_path/bin:${System.env.PATH}"
+      commandLine './Configure', "android-${arch}", "no-asm", "-D__ANDROID_API__=${_minSdkVersion}"
+    }
+
+    // Build OpenSSL
+    exec {
+      workingDir openssl_dest
+      environment "ANDROID_NDK_ROOT", ndk_bundle_path
+      environment "PATH", "$toolchain_path/bin:${System.env.PATH}"
+      commandLine 'make', 'build_libs'
+    }
+  }
 }
 
