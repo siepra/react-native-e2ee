@@ -1,1 +1,7 @@
 node_modules
+lib
+android/.cxx
+android/.gradle
+android/.idea
+android/build
+android/local.properties
