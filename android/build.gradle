@@ -71,7 +71,8 @@ android {
     }
 
     ndk {
-      abiFilters = project(":app").android.defaultConfig.ndk.abiFilters ?: ["armeabi-v7a", "x86_64", "arm64-v8a"]
+      // noinspection ChromeOsAbiSupport
+      abiFilters = ["x86_64", "arm64-v8a"]
     }
   }
 
@@ -100,14 +101,17 @@ android {
 repositories {
   mavenCentral()
   google()
+  maven { url 'https://www.jitpack.io/' }
 }
 
 
 dependencies {
+  // Required -- JUnit 4 framework
+  testImplementation "junit:junit:4.13.2"
   // For < 0.71, this will be from the local maven repo
   // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
-  //noinspection GradleDynamicVersion
-  implementation "com.facebook.react:react-native:+"
+  // noinspection GradleDynamicVersion
+  implementation "com.facebook.react:react-android:0.72.7"
 }
 
 task downloadAndBuildOpenSSL {
@@ -199,4 +203,3 @@ task downloadAndBuildOpenSSL {
     }
   }
 }
-
