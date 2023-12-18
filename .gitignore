@@ -5,3 +5,9 @@ android/.gradle
 android/.idea
 android/build
 android/local.properties
+
+example/android/.cxx
+example/android/.gradle
+example/android/.idea
+example/android/build
+example/android/local.properties
