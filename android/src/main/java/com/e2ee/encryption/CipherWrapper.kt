@@ -5,6 +5,7 @@
 
 import android.util.Base64
 import android.util.Log
+import com.e2ee.encryption.EncryptionManager
 import java.io.ByteArrayOutputStream
 import java.security.Key
 import javax.crypto.Cipher

@@ -8,7 +8,7 @@ import android.os.Build
 import android.security.KeyPairGeneratorSpec
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import android.util.Base64
+import com.e2ee.encryption.EncryptionManager
 import java.math.BigInteger
 import java.security.KeyPair
 import java.security.KeyPairGenerator

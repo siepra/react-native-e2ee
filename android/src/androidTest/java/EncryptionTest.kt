@@ -3,6 +3,8 @@ import org.junit.Assert.assertEquals
 
 import androidx.test.platform.app.InstrumentationRegistry
 
+import com.e2ee.encryption.EncryptionManager
+
 class EncryptionTest {
 
     val context = InstrumentationRegistry.getInstrumentation().context

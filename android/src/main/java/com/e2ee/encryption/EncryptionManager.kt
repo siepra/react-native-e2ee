@@ -1,14 +1,21 @@
+package com.e2ee.encryption
+
 /**
  * Thanks to Nipun Ruwanpathirana for sharing the core methods for e2ee on Android
  * (https://nipunr.medium.com/end-to-end-encryption-ios-android-rsa-65cfd015184a)
  */
 
+import CipherWrapper
+import KeyStoreWrapper
+
 import android.content.Context
 import android.util.Base64
+
 import java.security.KeyFactory
 import java.security.KeyPair
 import java.security.PublicKey
 import java.security.spec.X509EncodedKeySpec
+
 
 class EncryptionManager(context: Context) {
 
@@ -73,10 +80,10 @@ class EncryptionManager(context: Context) {
         return masterKey?.public
     }
 
-//    fun getMyPublicKeyString(): String {
-//        val publicKey: PublicKey? = getMyPublicKey()
-//        return String(Base64.encode(publicKey?.encoded, Base64.DEFAULT))
-//    }
+    fun getMyPublicKeyString(): String {
+        val publicKey: PublicKey? = getMyPublicKey()
+        return String(Base64.encode(publicKey?.encoded, Base64.DEFAULT))
+    }
 
     fun getOtherPublicKey(key: String): PublicKey? {
         return try {

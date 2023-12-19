@@ -8,6 +8,9 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.module.annotations.ReactModule;
 
+import com.e2ee.encryption.EncryptionManager;
+
+
 @ReactModule(name = E2eeModule.NAME)
 public class E2eeModule extends ReactContextBaseJavaModule {
   public static final String NAME = "E2ee";
@@ -33,5 +36,15 @@ public class E2eeModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void multiply(double a, double b, Promise promise) {
     promise.resolve(nativeMultiply(a, b));
+  }
+
+  @ReactMethod
+  public void generateKeyPair(Promise promise) {
+    EncryptionManager encryptionManager = new EncryptionManager(getReactApplicationContext());
+    encryptionManager.createMasterKey();
+
+    String publicKey = encryptionManager.getMyPublicKeyString();
+
+    promise.resolve(publicKey);
   }
 }
