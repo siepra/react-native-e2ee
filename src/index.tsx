@@ -24,3 +24,18 @@ export function multiply(a: number, b: number): Promise<number> {
 export function generateKeyPair(): Promise<string> {
   return E2ee.generateKeyPair();
 }
+
+export function getOwnPublicKey(): Promise<string> {
+  return E2ee.getOwnPublicKey();
+}
+
+export function encryptMessage(
+  publicKey: string,
+  message: string
+): Promise<string> {
+  return E2ee.encrypt(publicKey, message);
+}
+
+export function decryptMessage(message: string): Promise<string> {
+  return E2ee.decrypt(message);
+}
