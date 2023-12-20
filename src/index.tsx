@@ -25,17 +25,17 @@ export function generateKeyPair(): Promise<string> {
   return E2ee.generateKeyPair();
 }
 
-export function getOwnPublicKey(): Promise<string> {
+export function getOwnPublicKey(): Promise<string | null> {
   return E2ee.getOwnPublicKey();
 }
 
 export function encryptMessage(
-  publicKey: string,
-  message: string
-): Promise<string> {
+  message: string,
+  publicKey: string
+): Promise<string | null> {
   return E2ee.encrypt(publicKey, message);
 }
 
-export function decryptMessage(message: string): Promise<string> {
+export function decryptMessage(message: string): Promise<string | null> {
   return E2ee.decrypt(message);
 }

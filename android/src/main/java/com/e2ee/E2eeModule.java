@@ -29,6 +29,8 @@ public class E2eeModule extends ReactContextBaseJavaModule {
     System.loadLibrary("cpp");
   }
 
+  EncryptionManager encryptionManager = new EncryptionManager(getReactApplicationContext());
+
   private static native double nativeMultiply(double a, double b);
 
   // Example method
@@ -40,11 +42,26 @@ public class E2eeModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void generateKeyPair(Promise promise) {
-    EncryptionManager encryptionManager = new EncryptionManager(getReactApplicationContext());
     encryptionManager.createMasterKey();
-
     String publicKey = encryptionManager.getMyPublicKeyString();
-
     promise.resolve(publicKey);
+  }
+
+  @ReactMethod
+  public void getOwnPublicKey(Promise promise) {
+    String publicKey = encryptionManager.getMyPublicKeyString();
+    promise.resolve(publicKey);
+  }
+
+  @ReactMethod
+  public void encryptMessage(String message, String publicKey, Promise promise) {
+    String encrypted = encryptionManager.encryptOthers(message, publicKey);
+    promise.resolve(encrypted);
+  }
+
+  @ReactMethod
+  public void decryptMessage(String message, Promise promise) {
+    String decrypted = encryptionManager.decrypt(message);
+    promise.resolve(decrypted);
   }
 }

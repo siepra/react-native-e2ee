@@ -54,12 +54,22 @@ class EncryptionManager(context: Context) {
         return CipherWrapper(TRANSFORMATION_ASYMMETRIC).encrypt(data, masterKey?.public)
     }
 
-    fun encryptOthers(data: String, key: PublicKey): String? {
-        return CipherWrapper(TRANSFORMATION_ASYMMETRIC).encrypt(data, key)
+    fun encryptOthers(data: String, publicKeyString: String): String? {
+        val publicKey: PublicKey? = getOtherPublicKey(publicKeyString)
+        return if (publicKey !== null) {
+            CipherWrapper(TRANSFORMATION_ASYMMETRIC).encrypt(data, publicKey)
+        } else {
+            null
+        }
     }
 
-    fun encryptOthers(data: ByteArray, key: PublicKey): ByteArray? {
-        return CipherWrapper(TRANSFORMATION_ASYMMETRIC).encrypt(data, key)
+    fun encryptOthers(data: ByteArray, publicKeyString: String): ByteArray? {
+        val publicKey: PublicKey? = getOtherPublicKey(publicKeyString)
+        return if (publicKey !== null) {
+            CipherWrapper(TRANSFORMATION_ASYMMETRIC).encrypt(data, publicKey)
+        } else {
+            null
+        }
     }
 
     fun decrypt(data: String): String? {
@@ -80,12 +90,16 @@ class EncryptionManager(context: Context) {
         return masterKey?.public
     }
 
-    fun getMyPublicKeyString(): String {
+    fun getMyPublicKeyString(): String? {
         val publicKey: PublicKey? = getMyPublicKey()
-        return String(Base64.encode(publicKey?.encoded, Base64.DEFAULT))
+        return if (publicKey !== null) {
+            String(Base64.encode(publicKey.encoded, Base64.DEFAULT))
+        } else {
+            null
+        }
     }
 
-    fun getOtherPublicKey(key: String): PublicKey? {
+    private fun getOtherPublicKey(key: String): PublicKey? {
         return try {
             val publicBytes: ByteArray =
                 Base64.decode(key, Base64.DEFAULT)
