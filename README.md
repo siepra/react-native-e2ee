@@ -31,6 +31,10 @@ The package is not yet present on NPM registry.
 * Full API coverage for <b>Android</b>
 
 
+## Roadmap
+Examine the upcoming changes [here](https://github.com/siepra/react-native-e2ee/issues/1).
+
+
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
