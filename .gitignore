@@ -12,3 +12,8 @@ example/android/.idea
 example/android/local.properties
 example/android/app/build
 example/yarn-error.log
+example/ios/build
+example/ios/Pods
+example/ios/Podfile.lock
+example/ios/E2eeExample.xcodeproj
+example/ios/E2eeExample.xcworkspace
