@@ -12,13 +12,25 @@ import {
 export default function App() {
   const [publicKey, setPublicKey] = React.useState<string>('');
   const [inputValue, setInputValue] = React.useState<string>('');
-  const [encryptedMessage, setEncryptedMessage] = React.useState<string>('');
+  const [encryptedMessage, setEncryptedMessage] = React.useState<
+    string | null
+  >();
+  const [error, setError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     generateKeyPair().then((publicKey) => {
       setPublicKey(publicKey);
     });
   }, [setPublicKey]);
+
+  const handleInputChange = React.useCallback(
+    (text: string) => {
+      setError(null);
+      setEncryptedMessage(null);
+      setInputValue(text);
+    },
+    [setInputValue, setEncryptedMessage, setError]
+  );
 
   const printPublicKey = React.useCallback(() => {
     Alert.alert('Public Key', publicKey, [
@@ -35,6 +47,13 @@ export default function App() {
   }, [publicKey]);
 
   const handleEncryption = React.useCallback(async () => {
+    if (inputValue.length === 0) {
+      setError('Input is empty');
+      return;
+    }
+
+    setError(null);
+
     const encrypted = await encryptMessage(inputValue, publicKey);
 
     if (!encrypted) {
@@ -55,9 +74,14 @@ export default function App() {
         style: 'cancel',
       },
     ]);
-  }, [inputValue, publicKey, setEncryptedMessage]);
+  }, [inputValue, publicKey, setEncryptedMessage, setError]);
 
   const handleDecryption = React.useCallback(async () => {
+    if (!encryptedMessage) {
+      setError('Encrypt message first');
+      return;
+    }
+
     const decrypted = await decryptMessage(encryptedMessage);
 
     if (!decrypted) {
@@ -72,7 +96,7 @@ export default function App() {
         style: 'cancel',
       },
     ]);
-  }, [encryptedMessage]);
+  }, [encryptedMessage, setError]);
 
   return (
     <View style={styles.container}>
@@ -80,10 +104,11 @@ export default function App() {
         <Text style={styles.label}>Enter message:</Text>
         <TextInput
           value={inputValue}
-          onChangeText={setInputValue}
+          onChangeText={handleInputChange}
           placeholder="Enter some text"
           style={styles.input}
         />
+        {error ? <Text style={styles.error}>{error}</Text> : null}
       </View>
       <Button title="Encrypt" onPress={handleEncryption} />
       <Button title="Decrypt" onPress={handleDecryption} />
@@ -100,18 +125,22 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     width: '80%',
+    marginBottom: 20,
   },
   label: {
     alignSelf: 'flex-start',
     fontSize: 16,
     marginBottom: 5,
   },
+  error: {
+    color: 'red',
+  },
   input: {
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
     width: '100%',
-    marginBottom: 20,
+    marginBottom: 5,
     padding: 10,
   },
 });
