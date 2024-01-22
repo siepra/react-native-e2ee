@@ -44,7 +44,12 @@ class RSAKeyManager {
             return nil
         }
         do {
-            return exportImportManager.exportRSAPublicKeyToPEM(try pubKey.data(), keyType: kSecAttrKeyTypeRSA as String, keySize: RSAKeyManager.KEY_SIZE)
+            let output = exportImportManager.exportRSAPublicKeyToPEM(try pubKey.data(), keyType: kSecAttrKeyTypeRSA as String, keySize: RSAKeyManager.KEY_SIZE)
+            
+            let key = output.replacingOccurrences(of: "-----BEGIN PUBLIC KEY-----\n", with: "")
+                .replacingOccurrences(of: "\n-----END PUBLIC KEY-----", with: "")
+            
+            return key
         } catch let error {
             //Log Error
             return nil
