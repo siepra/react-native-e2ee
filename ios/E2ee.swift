@@ -35,8 +35,7 @@ class E2ee: NSObject {
             
             resolve(encryptedMessageString)
         } catch let error {
-            //Log error
-            reject("MESSAGE ENCRYPTION ERROR", "Cannot encrypt message", nil)
+            reject("E2ee", "MESSAGE ENCRYPTION FAILED: " + error.localizedDescription, nil)
         }
     }
     
@@ -51,8 +50,7 @@ class E2ee: NSObject {
             
             resolve(decrypted)
         } catch let error {
-            //Log error
-            reject("MESSAGE DECRYPTION ERROR", "Cannot decrypt message", nil)
+            reject("E2ee", "MESSAGE DECRYPTION FAILED: " + error.localizedDescription, nil)
         }
     }
 }
