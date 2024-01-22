@@ -10,13 +10,13 @@ RCT_EXTERN_METHOD(getOwnPublicKey:(RCTPromiseResolveBlock)resolve
                            reject:(RCTPromiseRejectBlock)reject
                   )
 
-RCT_EXTERN_METHOD(encryptMessage:(NSString)message
-                       publicKey:(NSString)publicKey
+RCT_EXTERN_METHOD(encrypt:(NSString)publicKey
+                       message:(NSString)publicKey
                          resolve:(RCTPromiseResolveBlock)resolve
                           reject:(RCTPromiseRejectBlock)reject
                   )
 
-RCT_EXTERN_METHOD(decryptMessage:(NSString)message
+RCT_EXTERN_METHOD(decrypt:(NSString)message
                          resolve:(RCTPromiseResolveBlock)resolve
                           reject:(RCTPromiseRejectBlock)reject
                   )

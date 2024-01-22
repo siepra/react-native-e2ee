@@ -23,8 +23,8 @@ class E2ee: NSObject {
         resolve(publicKey)
     }
     
-    @objc(encryptMessage:publicKey:resolve:reject:)
-    func encryptMessage(_ message: String, publicKey: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    @objc(encrypt:message:resolve:reject:)
+    func encrypt(_ publicKey: String, message: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         do {
             let clear = try ClearMessage(string: message, using: .utf8)
             
@@ -40,8 +40,8 @@ class E2ee: NSObject {
         }
     }
     
-    @objc(decryptMessage:resolve:reject:)
-    func decryptMessage(_ message: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    @objc(decrypt:resolve:reject:)
+    func decrypt(_ message: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         do {
             let privateKey = RSAKeyManager.shared.getMyPrivateKey()!
             
