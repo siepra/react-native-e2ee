@@ -11,18 +11,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class E2eePackage implements ReactPackage {
-  @NonNull
+public class E2eePackage extends TurboReactPackage {
+  
+  @Nullable
   @Override
-  public List<NativeModule> createNativeModules(@NonNull ReactApplicationContext reactContext) {
-    List<NativeModule> modules = new ArrayList<>();
-    modules.add(new E2eeModule(reactContext));
-    return modules;
+  public NativeModule getModule(String name, ReactApplicationContext reactContext) {
+          return null;
   }
 
-  @NonNull
   @Override
-  public List<ViewManager> createViewManagers(@NonNull ReactApplicationContext reactContext) {
-    return Collections.emptyList();
+  public ReactModuleInfoProvider getReactModuleInfoProvider() {
+      return null;
   }
 }

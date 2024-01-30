@@ -154,5 +154,17 @@
         }
       ]
     ]
+  },
+  "codegenConfig" : {
+    "libraries": [
+      {
+        "name": "RNE2eeSpec",
+        "type": "modules",
+        "jsSrcsDir": "./src",
+        "android": {
+          "javaPackageName": "com.e2ee"
+        }
+      }
+    ]
   }
 }
