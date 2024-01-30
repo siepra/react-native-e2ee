@@ -13,7 +13,20 @@ Of course, the server (or another handy way of distributing data between devices
 The project encrypts with RSA (Ultimately it'll use hybrid encryption with RSA and AES).
 
 ## Installation
-The package is not yet present on NPM registry.
+
+Open a Terminal in your project's folder and run:
+
+#### Using `yarn`
+
+```sh
+yarn add react-native-e2ee
+```
+
+#### Using `npm`
+
+```sh
+npm install react-native-e2ee
+```
 
 
 ## Usage/API
@@ -29,6 +42,7 @@ The package is not yet present on NPM registry.
 
 ## Key progress so far
 * Full API coverage for <b>Android</b>
+* Full API coverage for <b>iOS</b>
 
 
 ## Roadmap
