@@ -1,15 +1,4 @@
-#ifdef __cplusplus
-#import "react-native-e2ee.h"
-#endif
+#import <RNE2eeSpec/RNE2eeSpec.h>
 
-#iE2eeCT_NEW_ARCH_ENABLED
-#import "RNE2eeSpec.h"
-
-@interface E2ee : NSObject <NativeE2eeSpec>
-#else
-#import <React/RCTBridgeModule.h>
-
-@interface E2ee : NSObject <RCTBridgeModule>
-#endif
-
+@interface RNE2ee : NSObject <NativeE2eeSpec>
 @end
