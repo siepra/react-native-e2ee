@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
 
   s.swift_version = '5.8'
 
-  s.source_files = "ios/**/*.{m,swift}", "cpp/**/*.{hpp,cpp}"
+  s.source_files = "ios/**/*.{m,mm,swift}", "cpp/**/*.{hpp,cpp}"
 
   s.dependency "SwiftyRSA"
 
