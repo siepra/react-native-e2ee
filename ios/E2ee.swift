@@ -4,7 +4,7 @@ import SwiftyRSA
 import Foundation
 
 @objc(E2ee)
-class E2ee: NSObject {
+class E2ee: NSObject, SwiftProtocol {
 
     let _RSAKeyManager = RSAKeyManager.shared
 
