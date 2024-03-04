@@ -3,28 +3,25 @@ import SwiftyRSA
 
 import Foundation
 
-public typealias RCTPromiseResolveBlock = (Any?) -> Void
-public typealias RCTPromiseRejectBlock = (String?, String?, NSError?) -> Void
-
 @objc(E2ee)
-class E2ee: NSObject {
+class E2ee: NSObject, SwiftProtocol {
 
     let _RSAKeyManager = RSAKeyManager.shared
 
-    @objc(generateKeyPair:reject:)
-    func generateKeyPair(_ resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-        let publicKey = _RSAKeyManager.generateKeyPair()
-        resolve(publicKey)
+    @objc(generateKeyPair)
+    func generateKeyPair() -> String? {
+        guard let publicKey = _RSAKeyManager.generateKeyPair() else { return nil }
+        return publicKey
     }
     
-    @objc(getOwnPublicKey:reject:)
-    func getOwnPublicKey(_ resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-        let publicKey = _RSAKeyManager.getMyPublicKeyString()
-        resolve(publicKey)
+    @objc(getOwnPublicKey)
+    func getOwnPublicKey() -> String? {
+        guard let publicKey = _RSAKeyManager.getMyPublicKeyString() else { return nil }
+        return publicKey
     }
     
-    @objc(encrypt:message:resolve:reject:)
-    func encrypt(_ publicKey: String, message: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    @objc(encrypt:message:)
+    func encrypt(_ publicKey: String, message: String) -> String? {
         do {
             let clear = try ClearMessage(string: message, using: .utf8)
             
@@ -33,15 +30,15 @@ class E2ee: NSObject {
             let encryptedMessage = try clear.encrypted(with: publicKeyObject, padding: .PKCS1)
             let encryptedMessageString = encryptedMessage.base64String
             
-            resolve(encryptedMessageString)
+            return encryptedMessageString
         } catch let error {
             print("MESSAGE ENCRYPTION FAILED: \(error.localizedDescription)")
-            resolve(nil)
+            return nil
         }
     }
     
-    @objc(decrypt:resolve:reject:)
-    func decrypt(_ message: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    @objc(decrypt:)
+    func decrypt(_ message: String) -> String? {
         do {
             let privateKey = RSAKeyManager.shared.getMyPrivateKey()!
             
@@ -49,10 +46,10 @@ class E2ee: NSObject {
             let clear = try encrypted.decrypted(with: privateKey, padding: .PKCS1)
             let decrypted = try clear.string(encoding: .utf8)
             
-            resolve(decrypted)
+            return decrypted
         } catch let error {
             print("MESSAGE DECRYPTION FAILED: \(error.localizedDescription)")
-            resolve(nil)
+            return nil
         }
     }
 }

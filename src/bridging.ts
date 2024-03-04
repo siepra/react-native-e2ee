@@ -17,10 +17,6 @@ const E2ee = NativeModules.E2ee
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return E2ee.multiply(a, b);
-}
-
 export function generateKeyPair(): Promise<string> {
   return E2ee.generateKeyPair();
 }

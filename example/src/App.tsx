@@ -18,9 +18,8 @@ export default function App() {
   const [error, setError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
-    generateKeyPair().then((publicKey) => {
-      setPublicKey(publicKey);
-    });
+    const publicKey = generateKeyPair();
+    if (publicKey) setPublicKey(publicKey);
   }, [setPublicKey]);
 
   const handleInputChange = React.useCallback(
@@ -54,7 +53,7 @@ export default function App() {
 
     setError(null);
 
-    const encrypted = await encryptMessage(inputValue, publicKey);
+    const encrypted = encryptMessage(inputValue, publicKey);
 
     if (!encrypted) {
       console.error('Message encryption failed');
@@ -82,7 +81,7 @@ export default function App() {
       return;
     }
 
-    const decrypted = await decryptMessage(encryptedMessage);
+    const decrypted = decryptMessage(encryptedMessage);
 
     if (!decrypted) {
       console.error('Message decryption failed');
